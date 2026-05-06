@@ -16,6 +16,50 @@ Item {
     // batteryLevel: 0-100, or -1 when charging and level is unknown
     property var devices: []
 
+    // --- HID device monitoring ---
+
+    // Watch for HID device add/remove events via udev and re-poll when they occur.
+    // A short debounce gives the driver time to finish initialising before we query.
+    Process {
+        id: udevMonitor
+        running: true
+        command: ["udevadm", "monitor", "--subsystem-match=hid", "--udev"]
+
+        stdout: SplitParser {
+            onRead: line => {
+                if (line.includes(" add ") || line.includes(" remove ")) {
+                    Logger.d("HeadsetControl", "HID event:", line.trim())
+                    udevDebounce.restart()
+                }
+            }
+        }
+
+        stderr: StdioCollector {}
+
+        onExited: function(exitCode, exitStatus) {
+            Logger.w("HeadsetControl", "udevadm monitor exited unexpectedly, restarting in 5s")
+            udevRestartTimer.start()
+        }
+    }
+
+    // Wait for the device to finish initialising before querying headsetcontrol
+    Timer {
+        id: udevDebounce
+        interval: 1500
+        repeat: false
+        onTriggered: root.poll()
+    }
+
+    // Restart the monitor if it ever dies
+    Timer {
+        id: udevRestartTimer
+        interval: 5000
+        repeat: false
+        onTriggered: udevMonitor.running = true
+    }
+
+    // --- Periodic polling ---
+
     Process {
         id: pollProcess
         running: false
@@ -29,7 +73,7 @@ Item {
 
         onExited: function(exitCode, exitStatus) {
             if (exitCode !== 0) {
-                Logger.e("HeadsetBattery", "headsetcontrol exited with code:", exitCode)
+                Logger.e("HeadsetControl", "headsetcontrol exited with code:", exitCode)
                 root.devices = []
                 return
             }
@@ -56,9 +100,9 @@ Item {
                 }
 
                 root.devices = result
-                Logger.d("HeadsetBattery", "Polled", result.length, "device(s)")
+                Logger.d("HeadsetControl", "Polled", result.length, "device(s)")
             } catch (e) {
-                Logger.e("HeadsetBattery", "JSON parse error:", e.message)
+                Logger.e("HeadsetControl", "JSON parse error:", e.message)
                 root.devices = []
             }
         }
