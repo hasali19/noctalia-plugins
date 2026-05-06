@@ -1,6 +1,6 @@
 {
-  "id": "headset-battery",
-  "name": "Headset Battery",
+  "id": "headsetcontrol",
+  "name": "HeadsetControl",
   "version": "1.0.0",
   "minNoctaliaVersion": "4.0.0",
   "author": "hasali19",

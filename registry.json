@@ -1,0 +1,17 @@
+{
+  "plugins": [
+    {
+      "id": "headsetcontrol",
+      "name": "HeadsetControl",
+      "version": "1.0.0",
+      "official": false,
+      "author": "hasali19",
+      "description": "Shows battery status for connected headsets via HeadsetControl.",
+      "repository": "https://github.com/hasali19/noctalia-plugins",
+      "minNoctaliaVersion": "4.0.0",
+      "license": "MIT",
+      "tags": ["Bar", "Hardware"],
+      "lastUpdated": "2026-05-06T00:00:00Z"
+    }
+  ]
+}

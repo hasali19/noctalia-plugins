@@ -79,7 +79,7 @@ Item {
     }
 
     IpcHandler {
-        target: "plugin:headset-battery"
+        target: "plugin:headsetcontrol"
 
         function refresh() {
             root.poll()
