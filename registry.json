@@ -1,6 +1,19 @@
 {
   "plugins": [
     {
+      "id": "fang",
+      "name": "Fang",
+      "version": "1.0.0",
+      "official": false,
+      "author": "hasali19",
+      "description": "Shows battery status for Razer mice via Fang (dev.hasali.Fang DBus service).",
+      "repository": "https://github.com/hasali19/noctalia-plugins",
+      "minNoctaliaVersion": "4.0.0",
+      "license": "MIT",
+      "tags": ["Bar", "Hardware"],
+      "lastUpdated": "2026-05-24T00:00:00Z"
+    },
+    {
       "id": "headsetcontrol",
       "name": "HeadsetControl",
       "version": "1.0.0",
