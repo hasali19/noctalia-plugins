@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 import Quickshell
 import qs.Commons
 import qs.Widgets
@@ -107,5 +108,9 @@ Item {
         acceptedButtons: Qt.LeftButton
 
         onClicked: mainInstance?.poll()
+
+        ToolTip.visible: containsMouse && root.hasDevices
+        ToolTip.delay: 500
+        ToolTip.text: root.visibleDevices.map(d => d.name).filter(n => n).join("\n")
     }
 }

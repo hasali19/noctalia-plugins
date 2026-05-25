@@ -43,9 +43,17 @@ def get_device(path):
 
     charging_str = busctl_get_property(path, "IsCharging")
     connected_str = busctl_get_property(path, "IsConnected")
+    name_str = busctl_get_property(path, "Name")
+
+    # busctl wraps string values in double quotes; json.loads strips them cleanly
+    try:
+        name = json.loads(name_str) if name_str else ""
+    except (ValueError, TypeError):
+        name = name_str or ""
 
     return {
         "path": path,
+        "name": name,
         "battery": battery,
         "charging": charging_str == "true",
         "connected": connected_str == "true",
