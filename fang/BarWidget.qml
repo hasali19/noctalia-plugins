@@ -61,6 +61,7 @@ Item {
 
                 delegate: RowLayout {
                     spacing: Style.marginS
+                    opacity: modelData.connected ? 1.0 : 0.4
 
                     // Thin divider between multiple devices
                     Rectangle {
