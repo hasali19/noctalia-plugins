@@ -125,6 +125,20 @@ Item {
             }
         }
 
+        // Show a toast when the Dpi property changes on a mouse device
+        if (iface === "org.freedesktop.DBus.Properties" && member === "PropertiesChanged") {
+            if (argsStr.indexOf("'dev.hasali.Fang.Mouse'") >= 0) {
+                var dpiMatch = argsStr.match(/'Dpi': <[a-z0-9]+ (\d+)>/)
+                if (dpiMatch) {
+                    var newDpi = parseInt(dpiMatch[1])
+                    var device = root.devices.find(d => d.path === sigPath)
+                    var deviceName = device ? device.name : "Mouse"
+                    ToastService.showNotice(deviceName + " DPI changed to " + newDpi)
+                    Logger.d("Fang", "DPI changed to", newDpi, "for", sigPath)
+                }
+            }
+        }
+
         refreshDebounce.restart()
     }
 
