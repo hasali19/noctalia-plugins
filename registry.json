@@ -3,7 +3,7 @@
     {
       "id": "fang",
       "name": "Fang",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "official": false,
       "author": "hasali19",
       "description": "Shows battery status for Razer mice via Fang (dev.hasali.Fang DBus service).",
