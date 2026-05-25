@@ -1,10 +1,10 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 import Quickshell
 import qs.Commons
 import qs.Widgets
 import qs.Services.System
+import qs.Services.UI
 
 Item {
     id: root
@@ -109,8 +109,11 @@ Item {
 
         onClicked: mainInstance?.poll()
 
-        ToolTip.visible: containsMouse && root.hasDevices
-        ToolTip.delay: 500
-        ToolTip.text: root.visibleDevices.map(d => d.name).filter(n => n).join("\n")
+        onEntered: {
+            var names = root.visibleDevices.map(d => d.name).filter(n => n).join("\n")
+            if (names)
+                TooltipService.show(root, names, BarService.getTooltipDirection())
+        }
+        onExited: TooltipService.hide()
     }
 }
