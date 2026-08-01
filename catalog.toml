@@ -1,0 +1,30 @@
+# Noctalia plugins catalog.
+# Index of every plugin this source ships: the minimum needed to render, search,
+# and compat-check the list. The per-plugin plugin.toml stays authoritative; the
+# host re-reads it on enable. Keep one [[plugin]] row per plugin subdirectory.
+
+[[plugin]]
+id          = "hasali19/fang"
+name        = "Fang"
+version     = "2.0.0"
+updated_at  = 1785542400
+added_at    = 1785542400
+author      = "hasali19"
+license     = "MIT"
+icon        = "mouse"
+description = "Shows battery status for Razer mice via Fang (dev.hasali.Fang DBus service)."
+plugin_api  = 3
+tags        = ["Bar", "Hardware"]
+
+[[plugin]]
+id          = "hasali19/headsetcontrol"
+name        = "HeadsetControl"
+version     = "2.0.0"
+updated_at  = 1785542400
+added_at    = 1785542400
+author      = "hasali19"
+license     = "MIT"
+icon        = "headphones"
+description = "Shows battery status for connected headsets via HeadsetControl."
+plugin_api  = 3
+tags        = ["Bar", "Hardware"]
