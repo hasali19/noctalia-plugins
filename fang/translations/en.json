@@ -1,0 +1,8 @@
+{
+  "settings": {
+    "poll_interval": {
+      "label": "Poll interval",
+      "description": "How often, in seconds, to poll for device status as a fallback to DBus signals"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+# Bar widget showing battery status for connected headsets via
+# HeadsetControl. See https://github.com/hasali19/noctalia-plugins.
+
+id           = "hasali19/headsetcontrol"
+name         = "HeadsetControl"
+version      = "2.0.0"
+plugin_api   = 3
+author       = "hasali19"
+license      = "MIT"
+icon         = "headphones"
+description  = "Shows battery status for connected headsets via HeadsetControl."
+tags         = ["Bar", "Hardware"]
+dependencies = ["headsetcontrol"]
+
+[[widget]]
+id    = "battery"
+entry = "widget.luau"
+
+  [[widget.setting]]
+  key             = "poll_interval"
+  type            = "int"
+  label_key       = "settings.poll_interval.label"
+  description_key = "settings.poll_interval.description"
+  default         = 30
+  min             = 5
+  max             = 3600

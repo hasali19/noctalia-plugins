@@ -1,0 +1,26 @@
+# Bar widget showing battery status for Razer mice via Fang
+# (dev.hasali.Fang DBus service). See https://github.com/hasali19/fang.
+
+id           = "hasali19/fang"
+name         = "Fang"
+version      = "2.0.0"
+plugin_api   = 3
+author       = "hasali19"
+license      = "MIT"
+icon         = "mouse"
+description  = "Shows battery status for Razer mice via Fang (dev.hasali.Fang DBus service)."
+tags         = ["Bar", "Hardware"]
+dependencies = ["python3", "gdbus", "busctl"]
+
+[[widget]]
+id    = "battery"
+entry = "widget.luau"
+
+  [[widget.setting]]
+  key             = "poll_interval"
+  type            = "int"
+  label_key       = "settings.poll_interval.label"
+  description_key = "settings.poll_interval.description"
+  default         = 30
+  min             = 5
+  max             = 3600
