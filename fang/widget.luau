@@ -80,17 +80,6 @@ end
 
 -- ── DBus signal monitor (react immediately to device/DPI changes) ─────────
 
-local function extractFirstStringArg(argsStr)
-  if argsStr:sub(1, 1) ~= "'" then
-    return nil
-  end
-  local endQuote = argsStr:find("'", 2, true)
-  if not endQuote then
-    return nil
-  end
-  return argsStr:sub(2, endQuote - 1)
-end
-
 local function handleSignalLine(line)
   local trimmed = line:match("^%s*(.-)%s*$")
   if trimmed == "" then
@@ -121,19 +110,26 @@ local function handleSignalLine(line)
   local iface = fullName:sub(1, lastDot - 1)
   local member = fullName:sub(lastDot + 1)
 
-  -- Remove the device immediately on DeviceRemoved without waiting for the poll
-  if iface == "dev.hasali.Fang.DeviceManager" and member == "DeviceRemoved" then
-    local removedPath = extractFirstStringArg(argsStr)
-    if removedPath then
-      local filtered = {}
-      for _, device in ipairs(devices) do
-        if device.path ~= removedPath then
-          table.insert(filtered, device)
-        end
-      end
-      devices = filtered
-      render()
+  -- Remove devices immediately when the DeviceManager's Devices property
+  -- changes, without waiting for the poll.
+  if
+    iface == "org.freedesktop.DBus.Properties"
+    and member == "PropertiesChanged"
+    and argsStr:find("'dev.hasali.Fang.DeviceManager'", 1, true)
+    and argsStr:find("'Devices'", 1, true)
+  then
+    local currentPaths = {}
+    for path in argsStr:gmatch("'(/dev/hasali/Fang/[^']*)'") do
+      currentPaths[path] = true
     end
+    local filtered = {}
+    for _, device in ipairs(devices) do
+      if currentPaths[device.path] then
+        table.insert(filtered, device)
+      end
+    end
+    devices = filtered
+    render()
   end
 
   -- Notify when the Dpi property changes on a mouse device

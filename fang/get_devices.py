@@ -11,13 +11,14 @@ import json
 import sys
 
 SERVICE = "dev.hasali.Fang"
+DEVICE_IFACE = "dev.hasali.Fang.Device"
 MOUSE_IFACE = "dev.hasali.Fang.Mouse"
 BASE_PATH = "/dev/hasali/Fang"
 
 
-def busctl_get_property(path, prop):
+def busctl_get_property(path, iface, prop):
     result = subprocess.run(
-        ["busctl", "--system", "get-property", SERVICE, path, MOUSE_IFACE, prop],
+        ["busctl", "--system", "get-property", SERVICE, path, iface, prop],
         capture_output=True,
         text=True,
     )
@@ -29,11 +30,11 @@ def busctl_get_property(path, prop):
 
 
 def get_device(path):
-    has_battery = busctl_get_property(path, "HasBattery")
+    has_battery = busctl_get_property(path, MOUSE_IFACE, "HasBattery")
     if has_battery != "true":
         return None
 
-    battery_str = busctl_get_property(path, "BatteryLevel")
+    battery_str = busctl_get_property(path, MOUSE_IFACE, "BatteryLevel")
     if battery_str is None:
         return None
     try:
@@ -41,9 +42,10 @@ def get_device(path):
     except ValueError:
         return None
 
-    charging_str = busctl_get_property(path, "IsCharging")
-    connected_str = busctl_get_property(path, "IsConnected")
-    name_str = busctl_get_property(path, "Name")
+    charging_str = busctl_get_property(path, MOUSE_IFACE, "IsCharging")
+    connected_str = busctl_get_property(path, MOUSE_IFACE, "IsConnected")
+    # Name lives on the Device interface, shared with the mouse dock.
+    name_str = busctl_get_property(path, DEVICE_IFACE, "Name")
 
     # busctl wraps string values in double quotes; json.loads strips them cleanly
     try:
